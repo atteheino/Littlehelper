@@ -38,9 +38,9 @@ public class MainActivity_MainFragmentTest {
         Intent expectedIntent = new Intent(mainActivity, IBeaconListFragment.class);
         // Need to call this or assertion fails as StaertBluetooth is the first intent out of main activity
         Intent startBluetoothIntent = Shadows.shadowOf(mainActivity).getNextStartedActivity();
+        // Now is the IBeanconListFragment opened?
         assertThat(Shadows.shadowOf(mainActivity).getNextStartedActivity(), equalTo(expectedIntent));
 
-//        final String startScanText = mainActivity.getResources().getString(R.string.start_scan_text);
-//        assertThat(ShadowToast.getTextOfLatestToast(), equalTo(startScanText));
+
     }
 }
