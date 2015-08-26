@@ -1,7 +1,6 @@
 package fi.atteheino.littlehelper;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
@@ -10,16 +9,11 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
-import com.wgx.common.util.Log;
-import com.wgx.common.util.ToastUtil;
-import com.wgx.ibeacon.api.BeaconController;
-import com.wgx.ibeacon.api.BeaconnConfig;
 
-
-public class MainActivity extends Activity {
+public class MainActivity extends Activity
+        implements IBeaconListFragment.OnFragmentInteractionListener {
 
     private BluetoothAdapter mBluetoothAdapter;
 
@@ -71,5 +65,10 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onFragmentInteraction(String id) {
+
     }
 }

@@ -11,7 +11,7 @@ import org.robolectric.annotation.Config;
 import org.robolectric.util.FragmentTestUtil;
 
 import fi.atteheino.littlehelper.BuildConfig;
-import fi.atteheino.littlehelper.IBeaconListFragment;
+import fi.atteheino.littlehelper.IBeaconListActivity;
 import fi.atteheino.littlehelper.MainActivity;
 import fi.atteheino.littlehelper.MainActivityFragment;
 import fi.atteheino.littlehelper.R;
@@ -35,10 +35,10 @@ public class MainActivity_MainFragmentTest {
         FragmentTestUtil.startVisibleFragment(mainActivityFragment);
         mainActivity.findViewById(R.id.startScanButton).performClick();
 
-        Intent expectedIntent = new Intent(mainActivity, IBeaconListFragment.class);
+        Intent expectedIntent = new Intent(mainActivity, IBeaconListActivity.class);
         // Need to call this or assertion fails as StaertBluetooth is the first intent out of main activity
         Intent startBluetoothIntent = Shadows.shadowOf(mainActivity).getNextStartedActivity();
-        // Now is the IBeanconListFragment opened?
+        // Now is the IBeanconListActivity opened?
         assertThat(Shadows.shadowOf(mainActivity).getNextStartedActivity(), equalTo(expectedIntent));
 
 
