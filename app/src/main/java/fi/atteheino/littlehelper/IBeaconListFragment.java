@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
 
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 10000;
+    private static final String TAG = "IBeaconListFragment";
     private LeDeviceListAdapter mLeDeviceListAdapter;
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning;
@@ -61,6 +63,7 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            Log.d(TAG, "Device found " + device.getName());
                             mLeDeviceListAdapter.addDevice(device);
                             mLeDeviceListAdapter.notifyDataSetChanged();
                         }
@@ -79,7 +82,7 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO: Change Adapter to display your content
+
         mLeDeviceListAdapter = new LeDeviceListAdapter();
         mAdapter = mLeDeviceListAdapter;
 
@@ -124,6 +127,7 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
 
     private void scanLeDevice(final boolean enable) {
         if (enable) {
+            Log.d(TAG, "Starting scanning");
             // Stops scanning after a pre-defined scan period.
             mHandler.postDelayed(new Runnable() {
                 @Override
@@ -136,6 +140,7 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
             mScanning = true;
             mBluetoothAdapter.startLeScan(mLeScanCallback);
         } else {
+            Log.d(TAG, "Stopping scanning");
             mScanning = false;
             mBluetoothAdapter.stopLeScan(mLeScanCallback);
         }
