@@ -41,6 +41,14 @@ public class MainActivityFragment extends Fragment {
 
         }
     };
+    View.OnClickListener startScanActivityOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent();
+            intent.setClass(getActivity(), BluetoothListActivity.class);
+            startActivity(intent);
+        }
+    };
 
     public MainActivityFragment() {
     }
@@ -63,6 +71,9 @@ public class MainActivityFragment extends Fragment {
 
         Button startScanButton = (Button) getActivity().findViewById(R.id.startScanButton);
         startScanButton.setOnClickListener(startScanButtonOnClickListener);
+
+        Button startScanTestButton = (Button) getActivity().findViewById(R.id.button2);
+        startScanTestButton.setOnClickListener(startScanActivityOnClickListener);
 
     }
 }

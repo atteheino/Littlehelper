@@ -16,8 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,22 +39,23 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 10000;
     private static final String TAG = "IBeaconListFragment";
-    private LeDeviceListAdapter mLeDeviceListAdapter;
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning;
     private Handler mHandler;
     private OnFragmentInteractionListener mListener;
+    private ArrayList<BluetoothDevice> mLeDevicesList;
+    private ArrayAdapter<BluetoothDevice> mAdapter;
 
     /**
      * The fragment's ListView/GridView.
      */
-    private AbsListView mListView;
+    private ListView mListView;
 
     /**
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-    private ListAdapter mAdapter;
+    //private ListAdapter mAdapter;
     // Device scan callback.
     private BluetoothAdapter.LeScanCallback mLeScanCallback =
             new BluetoothAdapter.LeScanCallback() {
@@ -64,8 +66,8 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
                         @Override
                         public void run() {
                             Log.d(TAG, "Device found " + device.getName());
-                            mLeDeviceListAdapter.addDevice(device);
-                            mLeDeviceListAdapter.notifyDataSetChanged();
+                            addDevice(device);
+                            mAdapter.notifyDataSetChanged();
                         }
                     });
                 }
@@ -82,9 +84,9 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mLeDevicesList = new ArrayList<>();
+        mAdapter = new ArrayAdapter<BluetoothDevice>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, mLeDevicesList);
 
-        mLeDeviceListAdapter = new LeDeviceListAdapter();
-        mAdapter = mLeDeviceListAdapter;
 
         mHandler = new Handler();
 
@@ -114,8 +116,8 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
         View view = inflater.inflate(R.layout.fragment_ibeacon, container, false);
 
         // Set the adapter
-        mListView = (AbsListView) view.findViewById(android.R.id.list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+        mListView = (ListView) view.findViewById(R.id.bluetoothDeviceList);
+        mListView.setAdapter(mAdapter);
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
@@ -123,6 +125,12 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
         scanLeDevice(true);
 
         return view;
+    }
+
+    public void addDevice(BluetoothDevice device) {
+        if(!mLeDevicesList.contains(device)) {
+            mLeDevicesList.add(device);
+        }
     }
 
     private void scanLeDevice(final boolean enable) {
@@ -168,16 +176,13 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
         super.onResume();
         // Ensures Bluetooth is enabled on the device.  If Bluetooth is not currently enabled,
         // fire an intent to display a dialog asking the user to grant permission to enable it.
-        if (!mBluetoothAdapter.isEnabled()) {
+
             if (!mBluetoothAdapter.isEnabled()) {
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(enableBtIntent, 1);
             }
-        }
 
-        // Initializes list view adapter.
-        mLeDeviceListAdapter = new LeDeviceListAdapter();
-        mAdapter = (mLeDeviceListAdapter);
+
         scanLeDevice(true);
     }
 
@@ -185,7 +190,7 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
     public void onPause() {
         super.onPause();
         scanLeDevice(false);
-        mLeDeviceListAdapter.clear();
+        mAdapter.clear();
     }
 
     @Override
@@ -245,17 +250,13 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
         private ArrayList<BluetoothDevice> mLeDevices;
         private LayoutInflater mInflator;
 
-        public LeDeviceListAdapter() {
+        public LeDeviceListAdapter(Activity context, ArrayList<BluetoothDevice> list) {
             super();
-            mLeDevices = new ArrayList<BluetoothDevice>();
-            mInflator = IBeaconListFragment.this.getActivity().getLayoutInflater();
+            mLeDevices = list;
+            mInflator = context.getLayoutInflater();
         }
 
-        public void addDevice(BluetoothDevice device) {
-            if(!mLeDevices.contains(device)) {
-                mLeDevices.add(device);
-            }
-        }
+
 
         public BluetoothDevice getDevice(int position) {
             return mLeDevices.get(position);

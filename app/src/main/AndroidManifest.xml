@@ -39,6 +39,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="fi.atteheino.littlehelper.MainActivity" />
         </activity>
+
     </application>
 
 </manifest>
