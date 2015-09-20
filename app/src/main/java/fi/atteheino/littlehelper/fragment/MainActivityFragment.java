@@ -1,4 +1,4 @@
-package fi.atteheino.littlehelper;
+package fi.atteheino.littlehelper.fragment;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import fi.atteheino.littlehelper.IBeaconListActivity;
+import fi.atteheino.littlehelper.R;
 
 
 /**
@@ -41,14 +44,7 @@ public class MainActivityFragment extends Fragment {
 
         }
     };
-    View.OnClickListener startScanActivityOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent();
-            intent.setClass(getActivity(), BluetoothListActivity.class);
-            startActivity(intent);
-        }
-    };
+
 
     public MainActivityFragment() {
     }
@@ -72,8 +68,6 @@ public class MainActivityFragment extends Fragment {
         Button startScanButton = (Button) getActivity().findViewById(R.id.startScanButton);
         startScanButton.setOnClickListener(startScanButtonOnClickListener);
 
-        Button startScanTestButton = (Button) getActivity().findViewById(R.id.button2);
-        startScanTestButton.setOnClickListener(startScanActivityOnClickListener);
 
     }
 }

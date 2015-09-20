@@ -1,26 +1,43 @@
 package fi.atteheino.littlehelper;
 
 import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import fi.atteheino.littlehelper.fragment.IBeaconDetailFragment;
+import fi.atteheino.littlehelper.fragment.IBeaconListFragment;
 
 
 public class MainActivity extends Activity
         implements IBeaconListFragment.OnFragmentInteractionListener {
 
-    private BluetoothAdapter mBluetoothAdapter;
-
+    private static final int REQUEST_ENABLE_BT = 1;
+    private boolean mDualPane;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Check to see if we have a frame in which to embed the details
+        // fragment directly in the containing UI.
+        View detailsFrame = findViewById(R.id.details);
+        mDualPane = detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE;
 
+    }
 
-
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // User chose not to enable Bluetooth.
+        if (requestCode == REQUEST_ENABLE_BT && resultCode == Activity.RESULT_CANCELED) {
+            finish();
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -45,8 +62,33 @@ public class MainActivity extends Activity
         return super.onOptionsItemSelected(item);
     }
 
+
+
     @Override
     public void onFragmentInteraction(String id) {
+
+        if (mDualPane) {
+            // Create new fragment and transaction
+            Fragment newFragment = new IBeaconDetailFragment();
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+            // Replace whatever is in the fragment_container view with this fragment,
+            // and add the transaction to the back stack
+            transaction.replace(R.id.details, newFragment);
+            transaction.addToBackStack(null);
+
+            // Commit the transaction
+            transaction.commit();
+
+        } else {
+            Intent intent = new Intent();
+            intent.setClass(this, IBeaconDetailFragment.class);
+            intent.putExtra("id", id);
+            startActivity(intent);
+        }
+
+
+
 
     }
 }

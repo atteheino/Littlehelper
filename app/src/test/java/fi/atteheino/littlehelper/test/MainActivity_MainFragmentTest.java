@@ -13,8 +13,8 @@ import org.robolectric.util.FragmentTestUtil;
 import fi.atteheino.littlehelper.BuildConfig;
 import fi.atteheino.littlehelper.IBeaconListActivity;
 import fi.atteheino.littlehelper.MainActivity;
-import fi.atteheino.littlehelper.MainActivityFragment;
 import fi.atteheino.littlehelper.R;
+import fi.atteheino.littlehelper.fragment.MainActivityFragment;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;

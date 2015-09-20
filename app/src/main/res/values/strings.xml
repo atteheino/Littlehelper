@@ -12,4 +12,7 @@
     <string name="start_scan_text">scan would be started</string>
     <string name="title_activity_ibeacon_list">IBeaconListActivity</string>
     <string name="title_activity_bluetooth_list">BluetoothListActivity</string>
+
+    <string name="menu_scan">Scan</string>
+    <string name="menu_stop">Stop</string>
 </resources>

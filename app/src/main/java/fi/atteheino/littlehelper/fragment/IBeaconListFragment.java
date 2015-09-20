@@ -1,4 +1,4 @@
-package fi.atteheino.littlehelper;
+package fi.atteheino.littlehelper.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -12,6 +12,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -23,6 +26,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+
+import fi.atteheino.littlehelper.R;
 
 
 /**
@@ -182,7 +187,15 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
                 startActivityForResult(enableBtIntent, 1);
             }
 
+        // Initializes list view adapter.
+        if(mLeDevicesList == null){
+            mLeDevicesList = new ArrayList<>();
+        }
+        mAdapter = new ArrayAdapter<BluetoothDevice>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, mLeDevicesList);
 
+        // Set the adapter
+        mListView = (ListView) getActivity().findViewById(R.id.bluetoothDeviceList);
+        mListView.setAdapter(mAdapter);
         scanLeDevice(true);
     }
 
@@ -193,12 +206,45 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
         mAdapter.clear();
     }
 
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        getActivity().getMenuInflater().inflate(R.menu.menu_ibeacon_list, menu);
+        if (!mScanning) {
+            menu.findItem(R.id.menu_stop).setVisible(false);
+            menu.findItem(R.id.menu_scan).setVisible(true);
+            menu.findItem(R.id.menu_refresh).setActionView(null);
+        } else {
+            menu.findItem(R.id.menu_stop).setVisible(true);
+            menu.findItem(R.id.menu_scan).setVisible(false);
+            menu.findItem(R.id.menu_refresh).setActionView(
+                    R.layout.actionbar_indeterminate_progress);
+        }
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_scan:
+                mAdapter.clear();
+                scanLeDevice(true);
+                break;
+            case R.id.menu_stop:
+                scanLeDevice(false);
+                break;
+        }
+        return true;
+    }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            //mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+            mListener.onFragmentInteraction(mAdapter.getItem(position).getAddress());
         }
     }
 
