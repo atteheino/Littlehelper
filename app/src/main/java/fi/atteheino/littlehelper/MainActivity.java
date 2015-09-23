@@ -27,7 +27,7 @@ public class MainActivity extends Activity
         // Check to see if we have a frame in which to embed the details
         // fragment directly in the containing UI.
         View detailsFrame = findViewById(R.id.details);
-        mDualPane = detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE;
+        mDualPane = getResources().getBoolean(R.bool.dual_pane);;
 
     }
 

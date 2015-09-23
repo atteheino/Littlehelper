@@ -56,7 +56,7 @@ public class MainActivityFragment extends Fragment {
         // Check to see if we have a frame in which to embed the details
         // fragment directly in the containing UI.
         View detailsFrame = getActivity().findViewById(R.id.details);
-        mDualPane = detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE;
+        mDualPane = getResources().getBoolean(R.bool.dual_pane);;
 
 
         Button startScanButton = (Button) getActivity().findViewById(R.id.startScanButton);
