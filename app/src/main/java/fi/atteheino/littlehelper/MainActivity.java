@@ -16,6 +16,7 @@ public class MainActivity extends Activity
         implements IBeaconListFragment.OnFragmentInteractionListener,
         IBeaconDetailFragment.OnFragmentInteractionListener {
 
+    public static final String DETAILS = "details";
     private static final int REQUEST_ENABLE_BT = 1;
     private boolean mDualPane;
     @Override
@@ -70,7 +71,7 @@ public class MainActivity extends Activity
             if (mDualPane) {
 
                 IBeaconDetailFragment fragment = (IBeaconDetailFragment) getFragmentManager()
-                        .findFragmentByTag("details");
+                        .findFragmentByTag(DETAILS);
                 //Details fragment has not been created yet.
                 if(fragment == null) {
                     // Create new fragment and transaction
@@ -84,7 +85,7 @@ public class MainActivity extends Activity
 
                     // Replace whatever is in the fragment_container view with this fragment,
                     // and add the transaction to the back stack
-                    transaction.add(R.id.details, newFragment, "detail");
+                    transaction.replace(R.id.details, newFragment, DETAILS);
                     transaction.addToBackStack(null);
 
                     // Commit the transaction
@@ -95,7 +96,7 @@ public class MainActivity extends Activity
 
             } else {
                 Intent intent = new Intent();
-                intent.setClass(this, IBeaconDetailFragment.class);
+                intent.setClass(this, IBeaconDetailActivity.class);
                 intent.putExtra("id", id);
                 startActivity(intent);
             }

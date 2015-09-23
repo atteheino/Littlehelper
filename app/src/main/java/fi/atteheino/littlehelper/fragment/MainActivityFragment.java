@@ -22,19 +22,22 @@ public class MainActivityFragment extends Fragment {
         public void onClick(View v) {
             //ToastUtil.show(getActivity().getApplicationContext(), R.string.start_scan_text, Toast.LENGTH_LONG);
 
+                MainActivityFragment currFragment = (MainActivityFragment) getActivity().
+                        getFragmentManager().findFragmentById(R.id.fragment);
+
                 // Create new fragment and transaction
                 Fragment newFragment = new IBeaconListFragment();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
+                //Remove current fragment
+                transaction.remove(currFragment);
                 // Replace whatever is in the fragment_container view with this fragment,
                 // and add the transaction to the back stack
-                transaction.replace(R.id.fragmentContainer, newFragment);
+                transaction.add(R.id.fragmentContainer, newFragment);
                 transaction.addToBackStack(null);
 
                 // Commit the transaction
                 transaction.commit();
-
-
 
         }
     };
