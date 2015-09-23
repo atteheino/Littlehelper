@@ -14,7 +14,8 @@ import fi.atteheino.littlehelper.fragment.IBeaconListFragment;
 
 
 public class MainActivity extends Activity
-        implements IBeaconListFragment.OnFragmentInteractionListener {
+        implements IBeaconListFragment.OnFragmentInteractionListener,
+        IBeaconDetailFragment.OnFragmentInteractionListener {
 
     private static final int REQUEST_ENABLE_BT = 1;
     private boolean mDualPane;
@@ -67,14 +68,21 @@ public class MainActivity extends Activity
     @Override
     public void onFragmentInteraction(String id) {
 
+        IBeaconDetailFragment fragment = (IBeaconDetailFragment) getFragmentManager()
+                .findFragmentById(R.id.details);
         if (mDualPane) {
             // Create new fragment and transaction
             Fragment newFragment = new IBeaconDetailFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("id", id);
+            newFragment.setArguments(bundle);
+
+
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
             // Replace whatever is in the fragment_container view with this fragment,
             // and add the transaction to the back stack
-            transaction.replace(R.id.details, newFragment);
+            transaction.add(R.id.details, newFragment);
             transaction.addToBackStack(null);
 
             // Commit the transaction

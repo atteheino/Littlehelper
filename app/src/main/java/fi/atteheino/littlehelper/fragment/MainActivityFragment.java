@@ -2,14 +2,12 @@ package fi.atteheino.littlehelper.fragment;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import fi.atteheino.littlehelper.IBeaconListActivity;
 import fi.atteheino.littlehelper.R;
 
 
@@ -23,24 +21,20 @@ public class MainActivityFragment extends Fragment {
         @Override
         public void onClick(View v) {
             //ToastUtil.show(getActivity().getApplicationContext(), R.string.start_scan_text, Toast.LENGTH_LONG);
-            if (mDualPane) {
+
                 // Create new fragment and transaction
                 Fragment newFragment = new IBeaconListFragment();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
                 // Replace whatever is in the fragment_container view with this fragment,
                 // and add the transaction to the back stack
-                transaction.replace(R.id.details, newFragment);
+                transaction.replace(R.id.fragmentContainer, newFragment);
                 transaction.addToBackStack(null);
 
                 // Commit the transaction
                 transaction.commit();
 
-            } else {
-                Intent intent = new Intent();
-                intent.setClass(getActivity(), IBeaconListActivity.class);
-                startActivity(intent);
-            }
+
 
         }
     };
