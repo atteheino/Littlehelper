@@ -49,6 +49,10 @@ public class IBeaconDetailFragment extends Fragment {
         }
     }
 
+    public void updateFragment(String id) {
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

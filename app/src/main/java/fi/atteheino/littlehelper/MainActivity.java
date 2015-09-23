@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import fi.atteheino.littlehelper.fragment.IBeaconDetailFragment;
 import fi.atteheino.littlehelper.fragment.IBeaconListFragment;
@@ -26,7 +25,6 @@ public class MainActivity extends Activity
 
         // Check to see if we have a frame in which to embed the details
         // fragment directly in the containing UI.
-        View detailsFrame = findViewById(R.id.details);
         mDualPane = getResources().getBoolean(R.bool.dual_pane);;
 
     }
@@ -68,32 +66,39 @@ public class MainActivity extends Activity
     @Override
     public void onFragmentInteraction(String id) {
 
-        IBeaconDetailFragment fragment = (IBeaconDetailFragment) getFragmentManager()
-                .findFragmentById(R.id.details);
-        if (mDualPane) {
-            // Create new fragment and transaction
-            Fragment newFragment = new IBeaconDetailFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("id", id);
-            newFragment.setArguments(bundle);
+
+            if (mDualPane) {
+
+                IBeaconDetailFragment fragment = (IBeaconDetailFragment) getFragmentManager()
+                        .findFragmentByTag("details");
+                //Details fragment has not been created yet.
+                if(fragment == null) {
+                    // Create new fragment and transaction
+                    Fragment newFragment = new IBeaconDetailFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("id", id);
+                    newFragment.setArguments(bundle);
 
 
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
-            // Replace whatever is in the fragment_container view with this fragment,
-            // and add the transaction to the back stack
-            transaction.add(R.id.details, newFragment);
-            transaction.addToBackStack(null);
+                    // Replace whatever is in the fragment_container view with this fragment,
+                    // and add the transaction to the back stack
+                    transaction.add(R.id.details, newFragment, "detail");
+                    transaction.addToBackStack(null);
 
-            // Commit the transaction
-            transaction.commit();
+                    // Commit the transaction
+                    transaction.commit();
+                } else {
+                   fragment.updateFragment(id);
+                }
 
-        } else {
-            Intent intent = new Intent();
-            intent.setClass(this, IBeaconDetailFragment.class);
-            intent.putExtra("id", id);
-            startActivity(intent);
-        }
+            } else {
+                Intent intent = new Intent();
+                intent.setClass(this, IBeaconDetailFragment.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
+            }
 
 
 
