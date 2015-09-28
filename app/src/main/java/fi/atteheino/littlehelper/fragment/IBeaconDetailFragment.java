@@ -2,6 +2,7 @@ package fi.atteheino.littlehelper.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,10 +34,10 @@ public class IBeaconDetailFragment extends Fragment {
      * @param id ID of IBeacon to show.
      * @return A new instance of fragment IBeaconDetailFragment.
      */
-    public static IBeaconDetailFragment newInstance(String id) {
+    public static IBeaconDetailFragment newInstance(BluetoothDevice id) {
         IBeaconDetailFragment fragment = new IBeaconDetailFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_ID, id);
+        args.putParcelable(ARG_ID, id);
         fragment.setArguments(args);
         return fragment;
     }
@@ -49,7 +50,7 @@ public class IBeaconDetailFragment extends Fragment {
         }
     }
 
-    public void updateFragment(String id) {
+    public void updateFragment(BluetoothDevice id) {
 
     }
 
@@ -94,7 +95,7 @@ public class IBeaconDetailFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(String id);
+        public void onFragmentInteraction(BluetoothDevice id);
     }
 
 }

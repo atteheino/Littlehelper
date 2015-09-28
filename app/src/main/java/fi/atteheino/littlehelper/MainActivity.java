@@ -3,6 +3,7 @@ package fi.atteheino.littlehelper;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -65,7 +66,7 @@ public class MainActivity extends Activity
 
 
     @Override
-    public void onFragmentInteraction(String id) {
+    public void onFragmentInteraction(BluetoothDevice id) {
 
 
             if (mDualPane) {
@@ -77,7 +78,7 @@ public class MainActivity extends Activity
                     // Create new fragment and transaction
                     Fragment newFragment = new IBeaconDetailFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putString("id", id);
+                    bundle.putParcelable("id", id);
                     newFragment.setArguments(bundle);
 
 
