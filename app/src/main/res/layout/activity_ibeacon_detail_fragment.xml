@@ -6,7 +6,24 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="fi.atteheino.littlehelper.IBeaconDetailActivity">
 
-    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+    <TextView android:id="@+id/bluetooth_services" android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/hello_world" />
+
+    <ImageView
+        android:id="@+id/separator"
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/bluetooth_services"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/separator"
+        android:visibility="visible" />
+
+    <TextView android:id="@+id/bluetooth_characteristics" android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/separator"
+        android:text="@string/hello_world"
+         />
 
 </RelativeLayout>

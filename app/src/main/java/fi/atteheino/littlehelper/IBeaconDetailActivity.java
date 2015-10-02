@@ -1,16 +1,25 @@
 package fi.atteheino.littlehelper;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class IBeaconDetailActivity extends Activity {
+import fi.atteheino.littlehelper.fragment.IBeaconDetailFragment;
+
+public class IBeaconDetailActivity extends Activity
+implements IBeaconDetailFragment.OnFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ibeacon_detail_fragment);
+        if (getIntent()!=null){
+            BluetoothDevice device = getIntent().getExtras().getParcelable("id");
+            IBeaconDetailFragment detailFragment = (IBeaconDetailFragment)getFragmentManager().findFragmentById(R.id.details);
+            detailFragment.updateFragment(device);
+        }
     }
 
     @Override
@@ -33,5 +42,10 @@ public class IBeaconDetailActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onFragmentInteraction(BluetoothDevice id) {
+
     }
 }
