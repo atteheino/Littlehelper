@@ -51,8 +51,7 @@ public class IBeaconDetailFragment extends Fragment {
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             List<BluetoothGattService> services = gatt.getServices();
             Log.i("onServicesDiscovered", services.toString());
-            TextView bluetoothServices = (TextView)getActivity().findViewById(R.id.bluetooth_services);
-            bluetoothServices.setText(services.toString());
+            setBluetoothServices(services);
             gatt.readCharacteristic(services.get(1).getCharacteristics().get
                     (0));
         }
@@ -62,8 +61,7 @@ public class IBeaconDetailFragment extends Fragment {
                                          BluetoothGattCharacteristic
                                                  characteristic, int status) {
             Log.i("onCharacteristicRead", characteristic.toString());
-            TextView bluetoothCharacteristics = (TextView) getActivity().findViewById(R.id.bluetooth_characteristics);
-            bluetoothCharacteristics.setText(characteristic.toString());
+            setBluetoothCharacteristics(characteristic);
             gatt.disconnect();
         }
     };
@@ -120,6 +118,29 @@ public class IBeaconDetailFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    private void setBluetoothCharacteristics(final BluetoothGattCharacteristic characteristic) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                TextView bluetoothCharacteristics = (TextView) getActivity().findViewById(R.id.bluetooth_characteristics);
+                bluetoothCharacteristics.setText(characteristic.toString());
+            }
+        });
+    }
+
+    private void setBluetoothServices(final List<BluetoothGattService> services){
+        getActivity().runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        TextView bluetoothServices = (TextView) getActivity().findViewById(R.id.bluetooth_services);
+                        bluetoothServices.setText(services.toString());
+
+                    }
+                }
+        );
     }
 
     /**

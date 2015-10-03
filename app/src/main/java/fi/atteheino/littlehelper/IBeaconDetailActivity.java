@@ -15,9 +15,15 @@ implements IBeaconDetailFragment.OnFragmentInteractionListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ibeacon_detail_fragment);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         if (getIntent()!=null){
             BluetoothDevice device = getIntent().getExtras().getParcelable("id");
-            IBeaconDetailFragment detailFragment = (IBeaconDetailFragment)getFragmentManager().findFragmentById(R.id.details);
+            IBeaconDetailFragment detailFragment = (IBeaconDetailFragment)getFragmentManager().findFragmentById(R.id.fragment3);
             detailFragment.updateFragment(device);
         }
     }
