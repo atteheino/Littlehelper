@@ -37,6 +37,7 @@ public class IBeaconDetailFragment extends Fragment {
                 case BluetoothProfile.STATE_CONNECTED:
                     Log.i("gattCallback", "STATE_CONNECTED");
                     gatt.discoverServices();
+
                     break;
                 case BluetoothProfile.STATE_DISCONNECTED:
                     Log.e("gattCallback", "STATE_DISCONNECTED");
@@ -136,7 +137,16 @@ public class IBeaconDetailFragment extends Fragment {
                     @Override
                     public void run() {
                         TextView bluetoothServices = (TextView) getActivity().findViewById(R.id.bluetooth_services);
-                        bluetoothServices.setText(services.toString());
+                        StringBuilder sb = new StringBuilder();
+                        for(BluetoothGattService service: services){
+                           for(BluetoothGattCharacteristic characteristic: service.getCharacteristics()) {
+                               sb.append("\nUUID: \n");
+                               sb.append(characteristic.getUuid());
+                               sb.append("\nValue: \n");
+                               sb.append(characteristic.getValue());
+                           }
+                        }
+                        bluetoothServices.setText(sb.toString());
 
                     }
                 }
