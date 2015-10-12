@@ -3,11 +3,12 @@ package fi.atteheino.littlehelper;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import org.altbeacon.beacon.Beacon;
 
 import fi.atteheino.littlehelper.fragment.IBeaconDetailFragment;
 import fi.atteheino.littlehelper.fragment.IBeaconListFragment;
@@ -66,7 +67,7 @@ public class MainActivity extends Activity
 
 
     @Override
-    public void onFragmentInteraction(BluetoothDevice id) {
+    public void onFragmentInteraction(Beacon id) {
 
 
             if (mDualPane) {

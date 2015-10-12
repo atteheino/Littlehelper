@@ -2,7 +2,6 @@ package fi.atteheino.littlehelper.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -14,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import org.altbeacon.beacon.Beacon;
 
 import java.util.List;
 
@@ -66,7 +67,7 @@ public class IBeaconDetailFragment extends Fragment {
             gatt.disconnect();
         }
     };
-    private BluetoothDevice mId;
+    private Beacon mId;
     private BluetoothGatt mGatt;
     private OnFragmentInteractionListener mListener;
 
@@ -83,12 +84,12 @@ public class IBeaconDetailFragment extends Fragment {
         }
     }
 
-    public void updateFragment(BluetoothDevice id) {
+    public void updateFragment(Beacon id) {
         connectToGatt(id);
     }
 
-    private void connectToGatt(BluetoothDevice device) {
-        mGatt = device.connectGatt(getActivity(), false, gattCallback);
+    private void connectToGatt(Beacon device) {
+        //mGatt = device.connectGatt(getActivity(), false, gattCallback);
     }
 
     @Override
@@ -164,7 +165,7 @@ public class IBeaconDetailFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(BluetoothDevice id);
+        public void onFragmentInteraction(Beacon id);
     }
 }
 

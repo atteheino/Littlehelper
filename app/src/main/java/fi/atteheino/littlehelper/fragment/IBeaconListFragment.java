@@ -3,9 +3,13 @@ package fi.atteheino.littlehelper.fragment;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,7 +24,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.altbeacon.beacon.Beacon;
+import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconManager;
+import org.altbeacon.beacon.MonitorNotifier;
+import org.altbeacon.beacon.RangeNotifier;
+import org.altbeacon.beacon.Region;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,7 +46,7 @@ import fi.atteheino.littlehelper.R;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class IBeaconListFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class IBeaconListFragment extends Fragment implements AbsListView.OnItemClickListener, BeaconConsumer, RangeNotifier {
 
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 10000;
@@ -48,6 +56,7 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
     private OnFragmentInteractionListener mListener;
     private ArrayList<Beacon> mLeDevicesList;
     private ArrayAdapter<Beacon> mAdapter;
+    private BeaconManager mBeaconManager;
 
     /**
      * The fragment's ListView/GridView.
@@ -69,11 +78,12 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
 
         mLeDevicesList = new ArrayList<>();
         mAdapter = new ArrayAdapter<Beacon>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, mLeDevicesList);
-
-
         mHandler = new Handler();
 
         verifyBluetooth();
+        mBeaconManager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(getActivity());
+
+        mBeaconManager.bind(this);
 
     }
 
@@ -135,7 +145,7 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
             @Override
             public void run() {
                 Log.d(TAG, "Device(s) found ");
-                for(Beacon beacon : collection){
+                for (Beacon beacon : collection) {
                     addDevice(beacon);
 
                 }
@@ -194,7 +204,11 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
         mAdapter.clear();
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mBeaconManager.unbind(this);
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -247,6 +261,56 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
         if (emptyView instanceof TextView) {
             ((TextView) emptyView).setText(emptyText);
         }
+    }
+
+    @Override
+    public void onBeaconServiceConnect() {
+        mBeaconManager.setMonitorNotifier(new MonitorNotifier() {
+            @Override
+            public void didEnterRegion(Region region) {
+                Log.i(TAG, "I just saw an beacon for the first time!");
+                try {
+                    // start ranging for beacons.  This will provide an update once per second with the estimated
+                    // distance to the beacon in the didRAngeBeaconsInRegion method.
+                    mBeaconManager.startRangingBeaconsInRegion(region);
+                    mBeaconManager.setRangeNotifier(IBeaconListFragment.this);
+                } catch (RemoteException e) {   }
+            }
+
+            @Override
+            public void didExitRegion(Region region) {
+                Log.i(TAG, "I no longer see an beacon");
+            }
+
+            @Override
+            public void didDetermineStateForRegion(int state, Region region) {
+                Log.i(TAG, "I have just switched from seeing/not seeing beacons: "+state);
+            }
+        });
+
+        try {
+            mBeaconManager.startMonitoringBeaconsInRegion(new Region("myMonitoringUniqueId", null, null, null));
+        } catch (RemoteException e) {    }
+    }
+
+    @Override
+    public Context getApplicationContext() {
+        return null;
+    }
+
+    @Override
+    public void unbindService(ServiceConnection serviceConnection) {
+
+    }
+
+    @Override
+    public boolean bindService(Intent intent, ServiceConnection serviceConnection, int i) {
+        return false;
+    }
+
+    @Override
+    public void didRangeBeaconsInRegion(Collection<Beacon> collection, Region region) {
+        update(collection);
     }
 
     /**

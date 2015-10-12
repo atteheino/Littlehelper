@@ -80,15 +80,13 @@ public class LittleHelperApplication extends Application implements BootstrapNot
             mBeaconManager.setRangeNotifier(this);
         } catch (RemoteException e) {   }
 
-
-
-
     }
 
     @Override
     public void didExitRegion(Region region) {
         if (iBeaconListFragment != null) {
 
+            Log.d(TAG, "JUST EXITED FROM REGION: " + region);
             //iBeaconListFragment.logToDisplay("I no longer see a beacon.");
         }
     }
@@ -96,6 +94,7 @@ public class LittleHelperApplication extends Application implements BootstrapNot
     @Override
     public void didDetermineStateForRegion(int state, Region region) {
         if (iBeaconListFragment != null) {
+            Log.d(TAG, "STATE OF REGION CHANGED. New State: " + state + " for region: " + region);
             //iBeaconListFragment.logToDisplay("I have just switched from seeing/not seeing beacons: " + state);
         }
     }
@@ -134,6 +133,7 @@ public class LittleHelperApplication extends Application implements BootstrapNot
             // MainActivity
             Intent intent = new Intent(this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(Constants.INTENT_RANGED_REGION, region);
             // Important:  make sure to add android:launchMode="singleInstance" in the manifest
             // to keep multiple copies of this activity from getting created if the user has
             // already manually launched the app.
@@ -149,6 +149,7 @@ public class LittleHelperApplication extends Application implements BootstrapNot
                 // the foreground, we send a notification to the user on subsequent detections.
                 Log.d(TAG, "Sending notification.");
                 sendNotification();
+
             }
         }
     }
