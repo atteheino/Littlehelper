@@ -1,11 +1,12 @@
 package fi.atteheino.littlehelper;
 
 import android.app.Activity;
-import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import org.altbeacon.beacon.Beacon;
 
 import fi.atteheino.littlehelper.fragment.IBeaconListFragment;
 
@@ -41,7 +42,7 @@ implements IBeaconListFragment.OnFragmentInteractionListener{
     }
 
     @Override
-    public void onFragmentInteraction(BluetoothDevice id) {
+    public void onFragmentInteraction(Beacon id) {
         Intent intent = new Intent(this, IBeaconDetailActivity.class);
         intent.putExtra("id", id);
         startActivity(intent);

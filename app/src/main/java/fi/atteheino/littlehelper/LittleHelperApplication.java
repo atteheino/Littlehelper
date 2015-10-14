@@ -11,6 +11,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import org.altbeacon.beacon.Beacon;
+import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.RangeNotifier;
@@ -26,7 +27,7 @@ import fi.atteheino.littlehelper.fragment.IBeaconListFragment;
 /**
  * Created by atte on 9.10.2015.
  */
-public class LittleHelperApplication extends Application implements BootstrapNotifier, RangeNotifier {
+public class LittleHelperApplication extends Application implements BootstrapNotifier, RangeNotifier, BeaconConsumer {
 
     private static final String TAG = "LittleHelperApplication";
     private RegionBootstrap regionBootstrap;
@@ -48,7 +49,7 @@ public class LittleHelperApplication extends Application implements BootstrapNot
         //
         mBeaconManager.getBeaconParsers().clear();
         mBeaconManager.getBeaconParsers().add(new BeaconParser().
-                setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
+                setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
 
         Log.d(TAG, "setting up background monitoring for beacons and power saving");
         // wake up the app when a beacon is seen
@@ -62,8 +63,10 @@ public class LittleHelperApplication extends Application implements BootstrapNot
         backgroundPowerSaver = new BackgroundPowerSaver(this);
 
         // If you wish to test beacon detection in the Android Emulator, you can use code like this:
-        // BeaconManager.setBeaconSimulator(new TimedBeaconSimulator() );
-        // ((TimedBeaconSimulator) BeaconManager.getBeaconSimulator()).createTimedSimulatedBeacons();
+        //BeaconManager.setBeaconSimulator(new TimedBeaconSimulator() );
+        //((TimedBeaconSimulator) BeaconManager.getBeaconSimulator()).createTimedSimulatedBeacons();
+
+        mBeaconManager.bind(this);
     }
 
 
@@ -152,5 +155,21 @@ public class LittleHelperApplication extends Application implements BootstrapNot
 
             }
         }
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        // release whatever is needed
+        mBeaconManager.unbind(this);
+        mBeaconManager = null;
+    }
+
+    @Override
+    public void onBeaconServiceConnect() {
+        // callback for when service connection is complete
+
+        mBeaconManager.setBackgroundMode(true);
+
     }
 }
