@@ -150,8 +150,8 @@ public class LittleHelperApplication extends Application implements BootstrapNot
             } else {
                 // If we have already seen beacons before, but the monitoring activity is not in
                 // the foreground, we send a notification to the user on subsequent detections.
-                Log.d(TAG, "Sending notification.");
-                sendNotification();
+                Log.d(TAG, "Noticed beacon but won't do anything about it as app is not in the foreground.");
+                //sendNotification();
 
             }
         }
