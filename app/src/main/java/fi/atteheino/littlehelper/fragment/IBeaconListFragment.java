@@ -21,7 +21,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
@@ -34,6 +33,7 @@ import java.util.Collection;
 
 import fi.atteheino.littlehelper.LittleHelperApplication;
 import fi.atteheino.littlehelper.R;
+import fi.atteheino.littlehelper.adapter.IBeaconArrayAdapter;
 
 
 /**
@@ -47,10 +47,8 @@ import fi.atteheino.littlehelper.R;
  */
 public class IBeaconListFragment extends Fragment implements AbsListView.OnItemClickListener, BeaconConsumer {
 
-    // Stops scanning after 10 seconds.
-    private static final long SCAN_PERIOD = 10000;
+
     private static final String TAG = "IBeaconListFragment";
-    private boolean mScanning;
     private Handler mHandler;
     private OnFragmentInteractionListener mListener;
     private ArrayList<Beacon> mLeDevicesList;
@@ -75,7 +73,7 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
         super.onCreate(savedInstanceState);
 
         mLeDevicesList = new ArrayList<>();
-        mAdapter = new ArrayAdapter<Beacon>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, mLeDevicesList);
+        mAdapter = new IBeaconArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, mLeDevicesList);
         mHandler = new Handler();
 
 
@@ -187,8 +185,9 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
         if(mLeDevicesList == null){
             mLeDevicesList = new ArrayList<>();
         }
-        mAdapter = new ArrayAdapter<Beacon>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, mLeDevicesList);
-
+        if(mAdapter==null) {
+            mAdapter = new IBeaconArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, mLeDevicesList);
+        }
         // Set the adapter
         mListView = (ListView) getActivity().findViewById(R.id.bluetoothDeviceList);
         mListView.setAdapter(mAdapter);
@@ -215,16 +214,7 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         getActivity().getMenuInflater().inflate(R.menu.menu_ibeacon_list, menu);
-        if (!mScanning) {
-            menu.findItem(R.id.menu_stop).setVisible(false);
-            menu.findItem(R.id.menu_scan).setVisible(true);
-            menu.findItem(R.id.menu_refresh).setActionView(null);
-        } else {
-            menu.findItem(R.id.menu_stop).setVisible(true);
-            menu.findItem(R.id.menu_scan).setVisible(false);
-            menu.findItem(R.id.menu_refresh).setActionView(
-                    R.layout.actionbar_indeterminate_progress);
-        }
+
 
     }
 
@@ -251,18 +241,6 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
         }
     }
 
-    /**
-     * The default content for this Fragment has a TextView that is shown when
-     * the list is empty. If you would like to change the text, call this method
-     * to supply the text it should use.
-     */
-    public void setEmptyText(CharSequence emptyText) {
-        View emptyView = mListView.getEmptyView();
-
-        if (emptyView instanceof TextView) {
-            ((TextView) emptyView).setText(emptyText);
-        }
-    }
 
     @Override
     public void onBeaconServiceConnect() {
@@ -312,7 +290,7 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
+
         public void onFragmentInteraction(Beacon id);
     }
 }
