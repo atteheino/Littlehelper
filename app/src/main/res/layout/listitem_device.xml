@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2013 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2013 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,16 +14,37 @@
 -->
 
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:elevation="1dp"
     android:paddingBottom="10dp"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     android:paddingTop="10dp">
 
-    <TextView android:id="@+id/device_name"
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <ImageView
+            android:id="@+id/leftBackground"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.7" />
+
+        <ImageView
+            android:id="@+id/rightBackground"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.5"
+            android:background="@color/list_background_distance"
+            android:elevation="0dp"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/device_name"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Device Name"
@@ -40,7 +60,8 @@
         android:text="@string/ibeacon_list_distance_label"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <TextView android:id="@+id/device_address"
+    <TextView
+        android:id="@+id/device_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/device_name"
