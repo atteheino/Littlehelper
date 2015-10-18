@@ -50,15 +50,26 @@
         android:text="Device Name"
         android:textSize="24dp" />
 
+
     <TextView
         android:id="@+id/distance_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/device_name"
         android:layout_marginRight="10dp"
-        android:labelFor="@id/distance"
+        android:labelFor="@+id/distance"
         android:text="@string/ibeacon_list_distance_label"
         android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@id/distance_label"
+        android:layout_below="@+id/distance_label"
+        android:text="1.25 meters"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
 
     <TextView
         android:id="@+id/device_address"
@@ -69,14 +80,7 @@
         android:text="device Address"
         android:textSize="16dp" />
 
-    <TextView
-        android:id="@+id/distance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@id/distance_label"
-        android:layout_below="@+id/distance_label"
-        android:text="1.25 meters"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+
 
 
 </RelativeLayout>
