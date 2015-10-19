@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="list_background_distance">#b7f37e</color>
+    <color name="list_background">#a7eef3</color>
 </resources>
