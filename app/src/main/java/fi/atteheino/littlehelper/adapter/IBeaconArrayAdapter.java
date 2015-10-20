@@ -32,6 +32,14 @@ public class IBeaconArrayAdapter extends ArrayAdapter {
         return df.format(distance);
     }
 
+    private static String formatNameForScreen(final String name){
+        if(name==null || name.isEmpty()){
+            return UNKNOWN_DEVICE;
+        } else {
+            return name;
+        }
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) getContext()
@@ -41,9 +49,9 @@ public class IBeaconArrayAdapter extends ArrayAdapter {
         TextView deviceAddress = (TextView) rowView.findViewById(R.id.device_address);
         TextView deviceDistance = (TextView) rowView.findViewById(R.id.distance);
         Beacon beacon = (Beacon) beacons.get(position);
-        deviceName.setText(beacon.getBluetoothName().equals("") ? UNKNOWN_DEVICE : beacon.getBluetoothName());
+        deviceName.setText(formatNameForScreen(beacon.getBluetoothName()));
         deviceAddress.setText(beacon.getBluetoothAddress());
-        deviceDistance.setText(formatDistanceForScreen(beacon.getDistance()));
+        deviceDistance.setText(formatDistanceForScreen(beacon.getDistance()) + " meters");
         return rowView;
     }
 }

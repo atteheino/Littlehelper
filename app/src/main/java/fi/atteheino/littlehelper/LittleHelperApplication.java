@@ -16,6 +16,7 @@ import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
+import org.altbeacon.beacon.TimedBeaconSimulator;
 import org.altbeacon.beacon.powersave.BackgroundPowerSaver;
 import org.altbeacon.beacon.startup.BootstrapNotifier;
 import org.altbeacon.beacon.startup.RegionBootstrap;
@@ -63,8 +64,8 @@ public class LittleHelperApplication extends Application implements BootstrapNot
         backgroundPowerSaver = new BackgroundPowerSaver(this);
 
         // If you wish to test beacon detection in the Android Emulator, you can use code like this:
-        //BeaconManager.setBeaconSimulator(new TimedBeaconSimulator() );
-        //((TimedBeaconSimulator) BeaconManager.getBeaconSimulator()).createTimedSimulatedBeacons();
+        BeaconManager.setBeaconSimulator(new TimedBeaconSimulator() );
+        ((TimedBeaconSimulator) BeaconManager.getBeaconSimulator()).createTimedSimulatedBeacons();
 
         mBeaconManager.bind(this);
     }

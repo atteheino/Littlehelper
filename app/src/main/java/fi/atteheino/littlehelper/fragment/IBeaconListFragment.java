@@ -77,7 +77,7 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
         mHandler = new Handler();
 
 
-        verifyBluetooth();
+        //verifyBluetooth();
         mBeaconManager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(getActivity());
         mBeaconManager.bind(this);
 
@@ -179,7 +179,7 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
     @Override
     public void onResume() {
         super.onResume();
-        verifyBluetooth();
+        //verifyBluetooth();
         ((LittleHelperApplication) getActivity().getApplicationContext()).setiBeaconListFragment(this);
         // Initializes list view adapter.
         if(mLeDevicesList == null){
