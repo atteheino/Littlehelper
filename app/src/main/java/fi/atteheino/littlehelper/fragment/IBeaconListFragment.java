@@ -151,8 +151,15 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
         });
     }
 
+    /**
+     * If device already exists in the list, let's update it in the list
+     * @param device The Bluetooth Beacon to be added.
+     */
     public void addDevice(Beacon device) {
-        if(!mLeDevicesList.contains(device)) {
+        if(mLeDevicesList.contains(device)) {
+            mLeDevicesList.remove(device);
+            mLeDevicesList.add(device);
+        }else {
             mLeDevicesList.add(device);
         }
     }
