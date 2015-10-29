@@ -199,6 +199,7 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
         mListView = (ListView) getActivity().findViewById(R.id.bluetoothDeviceList);
         mListView.setAdapter(mAdapter);
         mBeaconManager.setBackgroundMode(false);
+        mBeaconManager.bind(this);
 
     }
 

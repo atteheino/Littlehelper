@@ -108,6 +108,11 @@ public class IBeaconDetailFragment extends Fragment implements BeaconConsumer {
     public void onDestroy() {
         super.onDestroy();
         mBeaconManager.unbind(this);
+        try {
+            mBeaconManager.stopRangingBeaconsInRegion(mId.getRegion());
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
