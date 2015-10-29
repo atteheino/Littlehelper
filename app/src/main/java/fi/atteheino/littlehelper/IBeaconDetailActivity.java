@@ -5,8 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import org.altbeacon.beacon.Beacon;
-
+import fi.atteheino.littlehelper.container.BeaconWithRegion;
 import fi.atteheino.littlehelper.fragment.IBeaconDetailFragment;
 
 public class IBeaconDetailActivity extends Activity
@@ -23,7 +22,7 @@ implements IBeaconDetailFragment.OnFragmentInteractionListener{
     protected void onResume() {
         super.onResume();
         if (getIntent()!=null){
-            Beacon device = getIntent().getExtras().getParcelable("id");
+            BeaconWithRegion device = getIntent().getExtras().getParcelable("id");
             IBeaconDetailFragment detailFragment = (IBeaconDetailFragment)getFragmentManager().findFragmentById(R.id.fragment3);
             detailFragment.updateFragment(device);
         }
@@ -52,7 +51,7 @@ implements IBeaconDetailFragment.OnFragmentInteractionListener{
     }
 
     @Override
-    public void onFragmentInteraction(Beacon id) {
+    public void onFragmentInteraction(BeaconWithRegion id) {
 
     }
 }

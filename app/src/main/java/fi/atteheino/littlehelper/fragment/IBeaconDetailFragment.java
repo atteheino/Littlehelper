@@ -2,23 +2,26 @@ package fi.atteheino.littlehelper.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.bluetooth.BluetoothGatt;
-import android.bluetooth.BluetoothGattCallback;
-import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattService;
-import android.bluetooth.BluetoothProfile;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import org.altbeacon.beacon.Beacon;
+import org.altbeacon.beacon.BeaconConsumer;
+import org.altbeacon.beacon.BeaconManager;
+import org.altbeacon.beacon.RangeNotifier;
+import org.altbeacon.beacon.Region;
 
-import java.util.List;
+import java.util.Collection;
 
 import fi.atteheino.littlehelper.R;
+import fi.atteheino.littlehelper.container.BeaconWithRegion;
 
 
 /**
@@ -28,48 +31,13 @@ import fi.atteheino.littlehelper.R;
  * to handle interaction events.
 
  */
-public class IBeaconDetailFragment extends Fragment {
+public class IBeaconDetailFragment extends Fragment implements BeaconConsumer {
     private static final String ARG_ID = "id";
-    private final BluetoothGattCallback gattCallback = new BluetoothGattCallback() {
-        @Override
-        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
-            Log.i("onConnectionStateChange", "Status: " + status);
-            switch (newState) {
-                case BluetoothProfile.STATE_CONNECTED:
-                    Log.i("gattCallback", "STATE_CONNECTED");
-                    gatt.discoverServices();
+    private static final String TAG = "IBeaconDetailFragment";
 
-                    break;
-                case BluetoothProfile.STATE_DISCONNECTED:
-                    Log.e("gattCallback", "STATE_DISCONNECTED");
-                    break;
-                default:
-                    Log.e("gattCallback", "STATE_OTHER");
-            }
-
-        }
-
-        @Override
-        public void onServicesDiscovered(BluetoothGatt gatt, int status) {
-            List<BluetoothGattService> services = gatt.getServices();
-            Log.i("onServicesDiscovered", services.toString());
-            setBluetoothServices(services);
-            gatt.readCharacteristic(services.get(1).getCharacteristics().get
-                    (0));
-        }
-
-        @Override
-        public void onCharacteristicRead(BluetoothGatt gatt,
-                                         BluetoothGattCharacteristic
-                                                 characteristic, int status) {
-            Log.i("onCharacteristicRead", characteristic.toString());
-            setBluetoothCharacteristics(characteristic);
-            gatt.disconnect();
-        }
-    };
-    private Beacon mId;
-    private BluetoothGatt mGatt;
+    private BeaconWithRegion mId;
     private OnFragmentInteractionListener mListener;
+    private BeaconManager mBeaconManager = null;
 
     public IBeaconDetailFragment() {
         // Required empty public constructor
@@ -82,15 +50,16 @@ public class IBeaconDetailFragment extends Fragment {
             mId = getArguments().getParcelable(ARG_ID);
             updateFragment(mId);
         }
+        //verifyBluetooth();
+        mBeaconManager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(getActivity());
+        mBeaconManager.bind(this);
     }
 
-    public void updateFragment(Beacon id) {
-        connectToGatt(id);
+    public void updateFragment(BeaconWithRegion id) {
+        mId = id;
     }
 
-    private void connectToGatt(Beacon device) {
-        //mGatt = device.connectGatt(getActivity(), false, gattCallback);
-    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -122,37 +91,41 @@ public class IBeaconDetailFragment extends Fragment {
         mListener = null;
     }
 
-    private void setBluetoothCharacteristics(final BluetoothGattCharacteristic characteristic) {
-        getActivity().runOnUiThread(new Runnable() {
+    @Override
+    public void onBeaconServiceConnect() {
+        mBeaconManager.setRangeNotifier(new RangeNotifier() {
             @Override
-            public void run() {
-                TextView bluetoothCharacteristics = (TextView) getActivity().findViewById(R.id.bluetooth_characteristics);
-                bluetoothCharacteristics.setText(characteristic.toString());
+            public void didRangeBeaconsInRegion(Collection<Beacon> collection, Region region) {
+                Log.d(TAG, "Collection of beacons found.");
+                Log.d(TAG, "Size of collection: " + collection.size());
             }
         });
+
+        try {
+            // and start ranging for the given region. This region has a uuid specificed so will
+            // only react on beacons with this uuid, the 2 other fields are minor and major version
+            // to be more specific if desired
+            mBeaconManager.startRangingBeaconsInRegion(mId.getRegion());
+        } catch (RemoteException e) {
+            Log.e(IBeaconDetailFragment.class.getSimpleName(), "Failed to start ranging", e);
+        }
     }
 
-    private void setBluetoothServices(final List<BluetoothGattService> services){
-        getActivity().runOnUiThread(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        TextView bluetoothServices = (TextView) getActivity().findViewById(R.id.bluetooth_services);
-                        StringBuilder sb = new StringBuilder();
-                        for(BluetoothGattService service: services){
-                           for(BluetoothGattCharacteristic characteristic: service.getCharacteristics()) {
-                               sb.append("\nUUID: \n");
-                               sb.append(characteristic.getUuid());
-                               sb.append("\nValue: \n");
-                               sb.append(characteristic.getValue());
-                           }
-                        }
-                        bluetoothServices.setText(sb.toString());
-
-                    }
-                }
-        );
+    @Override
+    public Context getApplicationContext() {
+        return getActivity().getApplicationContext();
     }
+
+    @Override
+    public void unbindService(ServiceConnection serviceConnection) {
+        getActivity().unbindService(serviceConnection);
+    }
+
+    @Override
+    public boolean bindService(Intent intent, ServiceConnection serviceConnection, int i) {
+        return getActivity().bindService(intent, serviceConnection, i);
+    }
+
 
     /**
      * This interface must be implemented by activities that contain this
@@ -165,7 +138,7 @@ public class IBeaconDetailFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(Beacon id);
+        public void onFragmentInteraction(BeaconWithRegion id);
     }
 }
 

@@ -7,13 +7,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import org.altbeacon.beacon.Beacon;
-
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.List;
 
 import fi.atteheino.littlehelper.R;
+import fi.atteheino.littlehelper.container.BeaconWithRegion;
 
 /**
  * Created by atte on 16.10.2015.
@@ -48,7 +47,7 @@ public class IBeaconArrayAdapter extends ArrayAdapter {
         TextView deviceName = (TextView) rowView.findViewById(R.id.device_name);
         TextView deviceAddress = (TextView) rowView.findViewById(R.id.device_address);
         TextView deviceDistance = (TextView) rowView.findViewById(R.id.distance);
-        Beacon beacon = (Beacon) beacons.get(position);
+        BeaconWithRegion beacon = (BeaconWithRegion) beacons.get(position);
         deviceName.setText(formatNameForScreen(beacon.getBluetoothName()));
         deviceAddress.setText(beacon.getBluetoothAddress());
         deviceDistance.setText(formatDistanceForScreen(beacon.getDistance()) + " meters");

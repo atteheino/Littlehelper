@@ -147,7 +147,7 @@ public class LittleHelperApplication extends Application implements BootstrapNot
             if (iBeaconListFragment != null) {
                 // If the Fragment is visible, we log info about the beacons we have
                 // seen on its display
-                iBeaconListFragment.update(collection);
+                iBeaconListFragment.update(collection, region);
             } else {
                 // If we have already seen beacons before, but the monitoring activity is not in
                 // the foreground, we send a notification to the user on subsequent detections.

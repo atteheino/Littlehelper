@@ -6,8 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import org.altbeacon.beacon.Beacon;
-
+import fi.atteheino.littlehelper.container.BeaconWithRegion;
 import fi.atteheino.littlehelper.fragment.IBeaconListFragment;
 
 public class IBeaconListActivity extends Activity
@@ -42,7 +41,7 @@ implements IBeaconListFragment.OnFragmentInteractionListener{
     }
 
     @Override
-    public void onFragmentInteraction(Beacon id) {
+    public void onFragmentInteraction(BeaconWithRegion id) {
         Intent intent = new Intent(this, IBeaconDetailActivity.class);
         intent.putExtra("id", id);
         startActivity(intent);

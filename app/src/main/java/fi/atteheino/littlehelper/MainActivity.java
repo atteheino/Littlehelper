@@ -8,8 +8,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import org.altbeacon.beacon.Beacon;
-
+import fi.atteheino.littlehelper.container.BeaconWithRegion;
 import fi.atteheino.littlehelper.fragment.IBeaconDetailFragment;
 import fi.atteheino.littlehelper.fragment.IBeaconListFragment;
 
@@ -69,7 +68,7 @@ public class MainActivity extends Activity
 
 
     @Override
-    public void onFragmentInteraction(Beacon id) {
+    public void onFragmentInteraction(BeaconWithRegion id) {
 
 
             if (mDualPane) {

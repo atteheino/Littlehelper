@@ -34,6 +34,7 @@ import java.util.Collection;
 import fi.atteheino.littlehelper.LittleHelperApplication;
 import fi.atteheino.littlehelper.R;
 import fi.atteheino.littlehelper.adapter.IBeaconArrayAdapter;
+import fi.atteheino.littlehelper.container.BeaconWithRegion;
 
 
 /**
@@ -51,8 +52,8 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
     private static final String TAG = "IBeaconListFragment";
     private Handler mHandler;
     private OnFragmentInteractionListener mListener;
-    private ArrayList<Beacon> mLeDevicesList;
-    private ArrayAdapter<Beacon> mAdapter;
+    private ArrayList<BeaconWithRegion> mLeDevicesList;
+    private ArrayAdapter<BeaconWithRegion> mAdapter;
     private BeaconManager mBeaconManager = null;
 
     /**
@@ -137,14 +138,13 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
 
     }
 
-    public void update(final Collection<Beacon> collection) {
+    public void update(final Collection<Beacon> collection, final Region region) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Log.d(TAG, "Device(s) found ");
                 for (Beacon beacon : collection) {
-                    addDevice(beacon);
-
+                    addDevice(new BeaconWithRegion(beacon, region));
                 }
                 mAdapter.notifyDataSetChanged();
             }
@@ -155,7 +155,7 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
      * If device already exists in the list, let's update it in the list
      * @param device The Bluetooth Beacon to be added.
      */
-    public void addDevice(Beacon device) {
+    public void addDevice(BeaconWithRegion device) {
         if(mLeDevicesList.contains(device)) {
             mLeDevicesList.remove(device);
             mLeDevicesList.add(device);
@@ -254,7 +254,7 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
         mBeaconManager.setRangeNotifier(new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> collection, Region region) {
-                update(collection);
+                update(collection, region);
             }
         });
 
@@ -298,7 +298,7 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
      */
     public interface OnFragmentInteractionListener {
 
-        public void onFragmentInteraction(Beacon id);
+        public void onFragmentInteraction(BeaconWithRegion id);
     }
 }
 
