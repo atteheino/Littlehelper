@@ -86,16 +86,28 @@ public class IBeaconDetailFragment extends Fragment implements BeaconConsumer {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mBeaconManager.setBackgroundMode(false);
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        mBeaconManager.unbind(this);
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
         mBeaconManager.setBackgroundMode(true);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mBeaconManager.unbind(this);
     }
 
     @Override
