@@ -1,23 +1,18 @@
 package fi.atteheino.littlehelper.test;
 
-import android.content.Intent;
 
+import org.altbeacon.beacon.BeaconManager;
+import org.altbeacon.beacon.TimedBeaconSimulator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
-import org.robolectric.Shadows;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.FragmentTestUtil;
 
 import fi.atteheino.littlehelper.BuildConfig;
-import fi.atteheino.littlehelper.IBeaconListActivity;
 import fi.atteheino.littlehelper.MainActivity;
-import fi.atteheino.littlehelper.R;
-import fi.atteheino.littlehelper.fragment.MainActivityFragment;
-
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertThat;
+import fi.atteheino.littlehelper.fragment.IBeaconListFragment;
 
 /**
  * Created by atte on 30.6.2015.
@@ -27,19 +22,23 @@ import static org.junit.Assert.assertThat;
 public class MainActivity_MainFragmentTest {
 
     @Test
-    public void testStartScanButtonClick() {
+    public void testIBeaconList() {
+
+        BeaconManager.setBeaconSimulator(new TimedBeaconSimulator());
+        ((TimedBeaconSimulator) BeaconManager.getBeaconSimulator()).createTimedSimulatedBeacons();
 
 
         MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
-        MainActivityFragment mainActivityFragment = new MainActivityFragment();
-        FragmentTestUtil.startVisibleFragment(mainActivityFragment);
-        mainActivity.findViewById(R.id.startScanButton).performClick();
+        IBeaconListFragment iBeaconListFragment = new IBeaconListFragment();
+        FragmentTestUtil.startVisibleFragment(iBeaconListFragment);
+
+        /*assertThat("List of iBeacons is empty", );
 
         Intent expectedIntent = new Intent(mainActivity, IBeaconListActivity.class);
         // Need to call this or assertion fails as StaertBluetooth is the first intent out of main activity
         Intent startBluetoothIntent = Shadows.shadowOf(mainActivity).getNextStartedActivity();
         // Now is the IBeanconListActivity opened?
-        assertThat(Shadows.shadowOf(mainActivity).getNextStartedActivity(), equalTo(expectedIntent));
+        assertThat(Shadows.shadowOf(mainActivity).getNextStartedActivity(), equalTo(expectedIntent));*/
 
 
     }
