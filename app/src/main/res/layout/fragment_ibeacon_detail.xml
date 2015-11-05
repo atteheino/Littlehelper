@@ -18,7 +18,7 @@
             android:layout_height="fill_parent">
 
             <TextView
-                android:id="@+id/bluetooth_services"
+                android:id="@+id/device_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/hello_world" />
@@ -28,17 +28,102 @@
                 android:id="@+id/separator"
                 android:layout_width="fill_parent"
                 android:layout_height="2dp"
-                android:layout_below="@id/bluetooth_services"
+                android:layout_below="@+id/device_name"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/separator"
                 android:visibility="visible" />
 
             <TextView
-                android:id="@+id/bluetooth_characteristics"
+                android:id="@+id/mac_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/separator"
+                android:text="@string/hello_world" />
+
+            <ImageView
+                android:id="@+id/separator2"
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:layout_below="@+id/mac_address"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/separator"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/UUID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separator2"
+                android:text="@string/hello_world" />
+
+            <ImageView
+                android:id="@+id/separator3"
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:layout_below="@+id/UUID"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/separator"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/major"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separator3"
+                android:text="@string/hello_world" />
+
+            <ImageView
+                android:id="@+id/separator4"
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:layout_below="@+id/major"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/separator"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/minor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separator4"
+                android:text="@string/hello_world" />
+
+            <ImageView
+                android:id="@+id/separator5"
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:layout_below="@+id/minor"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/separator"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separator5"
+                android:text="@string/hello_world" />
+
+            <ImageView
+                android:id="@+id/separator6"
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:layout_below="@+id/distance"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/separator"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/tx_power"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separator6"
                 android:text="@string/hello_world" />
         </RelativeLayout>
     </ScrollView>
