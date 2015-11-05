@@ -7,37 +7,23 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.List;
 
 import fi.atteheino.littlehelper.R;
 import fi.atteheino.littlehelper.container.BeaconWithRegion;
+import fi.atteheino.littlehelper.utils.DisplayHelpers;
 
 /**
  * Created by atte on 16.10.2015.
  */
 public class IBeaconArrayAdapter extends ArrayAdapter {
-    private static final String UNKNOWN_DEVICE = "Unknown Device";
     private List beacons;
     public IBeaconArrayAdapter(Context context, int resource, int textViewResourceId, List objects) {
         super(context, resource, textViewResourceId, objects);
         this.beacons = objects;
     }
 
-    private static String formatDistanceForScreen(final double distance){
-        DecimalFormat df = new DecimalFormat("#.##");
-        df.setRoundingMode(RoundingMode.CEILING);
-        return df.format(distance);
-    }
 
-    private static String formatNameForScreen(final String name){
-        if(name==null || name.isEmpty()){
-            return UNKNOWN_DEVICE;
-        } else {
-            return name;
-        }
-    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -48,9 +34,9 @@ public class IBeaconArrayAdapter extends ArrayAdapter {
         TextView deviceAddress = (TextView) rowView.findViewById(R.id.device_address);
         TextView deviceDistance = (TextView) rowView.findViewById(R.id.distance);
         BeaconWithRegion beacon = (BeaconWithRegion) beacons.get(position);
-        deviceName.setText(formatNameForScreen(beacon.getBluetoothName()));
+        deviceName.setText(DisplayHelpers.formatNameForScreen(beacon.getBluetoothName()));
         deviceAddress.setText(beacon.getBluetoothAddress());
-        deviceDistance.setText(formatDistanceForScreen(beacon.getDistance()) + " meters");
+        deviceDistance.setText(DisplayHelpers.formatDistanceForScreen(beacon.getDistance()) + " meters");
         return rowView;
     }
 }

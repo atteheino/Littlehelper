@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
@@ -22,6 +23,7 @@ import java.util.Collection;
 
 import fi.atteheino.littlehelper.R;
 import fi.atteheino.littlehelper.container.BeaconWithRegion;
+import fi.atteheino.littlehelper.utils.DisplayHelpers;
 
 
 /**
@@ -122,6 +124,7 @@ public class IBeaconDetailFragment extends Fragment implements BeaconConsumer {
             public void didRangeBeaconsInRegion(Collection<Beacon> collection, Region region) {
                 Log.d(TAG, "Collection of beacons found.");
                 Log.d(TAG, "Size of collection: " + collection.size());
+                updateValuesInDisplay(collection);
             }
         });
 
@@ -133,6 +136,20 @@ public class IBeaconDetailFragment extends Fragment implements BeaconConsumer {
         } catch (RemoteException e) {
             Log.e(IBeaconDetailFragment.class.getSimpleName(), "Failed to start ranging", e);
         }
+    }
+
+    private void updateValuesInDisplay(final Collection<Beacon> collection) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                for (Beacon beacon: collection){
+                    if(beacon.equals(mId)){
+                        TextView deviceName = (TextView) getActivity().findViewById(R.id.device_name);
+                        deviceName.setText(DisplayHelpers.formatNameForScreen(beacon.getBluetoothName()));
+                    }
+                }
+            }
+        });
     }
 
     @Override
