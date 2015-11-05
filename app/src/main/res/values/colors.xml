@@ -2,4 +2,5 @@
 <resources>
     <color name="list_background_distance">#b7f37e</color>
     <color name="list_background">#a7eef3</color>
+    <color name="black">#000</color>
 </resources>
