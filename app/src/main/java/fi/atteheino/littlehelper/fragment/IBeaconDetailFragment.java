@@ -41,6 +41,9 @@ public class IBeaconDetailFragment extends Fragment implements BeaconConsumer {
     private OnFragmentInteractionListener mListener;
     private BeaconManager mBeaconManager = null;
 
+    // UI Components
+    private TextView mDeviceName;
+
     public IBeaconDetailFragment() {
         // Required empty public constructor
     }
@@ -74,6 +77,9 @@ public class IBeaconDetailFragment extends Fragment implements BeaconConsumer {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         view.setVisibility(View.VISIBLE);
+        // Get references to UI Components
+        // Only need to do this once
+        mDeviceName =  (TextView) getActivity().findViewById(R.id.device_name);
     }
 
     @Override
@@ -143,9 +149,9 @@ public class IBeaconDetailFragment extends Fragment implements BeaconConsumer {
             @Override
             public void run() {
                 for (Beacon beacon: collection){
-                    if(beacon.equals(mId)){
-                        TextView deviceName = (TextView) getActivity().findViewById(R.id.device_name);
-                        deviceName.setText(DisplayHelpers.formatNameForScreen(beacon.getBluetoothName()));
+                    if(beacon.getBluetoothAddress().equals(mId.getBluetoothAddress())){
+
+                        mDeviceName.setText(DisplayHelpers.formatNameForScreen(beacon.getBluetoothName()));
                     }
                 }
             }
