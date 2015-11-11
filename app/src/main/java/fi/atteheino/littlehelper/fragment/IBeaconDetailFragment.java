@@ -21,6 +21,8 @@ import org.altbeacon.beacon.Region;
 
 import java.util.Collection;
 
+import fi.atteheino.littlehelper.LittleHelperApplication;
+import fi.atteheino.littlehelper.NotifyableBeaconListener;
 import fi.atteheino.littlehelper.R;
 import fi.atteheino.littlehelper.container.BeaconWithRegion;
 import fi.atteheino.littlehelper.utils.DisplayHelpers;
@@ -33,7 +35,7 @@ import fi.atteheino.littlehelper.utils.DisplayHelpers;
  * to handle interaction events.
 
  */
-public class IBeaconDetailFragment extends Fragment implements BeaconConsumer {
+public class IBeaconDetailFragment extends Fragment implements BeaconConsumer, NotifyableBeaconListener {
     private static final String ARG_ID = "id";
     private static final String TAG = "IBeaconDetailFragment";
 
@@ -96,6 +98,7 @@ public class IBeaconDetailFragment extends Fragment implements BeaconConsumer {
     @Override
     public void onResume() {
         super.onResume();
+        ((LittleHelperApplication) getActivity().getApplicationContext()).addNotifyableBeaconListener(this);
         mBeaconManager.setBackgroundMode(false);
     }
 
@@ -171,6 +174,11 @@ public class IBeaconDetailFragment extends Fragment implements BeaconConsumer {
     @Override
     public boolean bindService(Intent intent, ServiceConnection serviceConnection, int i) {
         return getActivity().bindService(intent, serviceConnection, i);
+    }
+
+    @Override
+    public void notifyOnBeaconsRanged(Collection<Beacon> beacons, Region region) {
+        updateValuesInDisplay(beacons);
     }
 
 

@@ -188,7 +188,8 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
     public void onResume() {
         super.onResume();
         //verifyBluetooth();
-        ((LittleHelperApplication) getActivity().getApplicationContext()).setiBeaconListFragment(this);
+        //((LittleHelperApplication) getActivity().getApplicationContext()).setiBeaconListFragment(this);
+        ((LittleHelperApplication) getActivity().getApplicationContext()).addNotifyableBeaconListener(this);
         // Initializes list view adapter.
         if(mLeDevicesList == null){
             mLeDevicesList = new ArrayList<>();
