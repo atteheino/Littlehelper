@@ -22,6 +22,8 @@ import org.altbeacon.beacon.startup.BootstrapNotifier;
 import org.altbeacon.beacon.startup.RegionBootstrap;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import fi.atteheino.littlehelper.fragment.IBeaconDetailFragment;
 import fi.atteheino.littlehelper.fragment.IBeaconListFragment;
@@ -37,6 +39,7 @@ public class LittleHelperApplication extends Application implements BootstrapNot
     private boolean haveDetectedBeaconsSinceBoot = false;
     private IBeaconListFragment iBeaconListFragment = null;
     private IBeaconDetailFragment mIBeaconDetailFragment = null;
+    private List<NotifyableBeaconListener> notifyableBeaconListenerList = null;
     private BeaconManager mBeaconManager;
 
     public void onCreate() {
@@ -74,6 +77,12 @@ public class LittleHelperApplication extends Application implements BootstrapNot
     }
 
 
+    public void addNotifyableBeaconListener(NotifyableBeaconListener notifyableBeaconListener) {
+        if(notifyableBeaconListenerList==null){
+            notifyableBeaconListenerList = Collections.EMPTY_LIST;
+        }
+        notifyableBeaconListenerList.add(notifyableBeaconListener);
+    }
 
     @Override
     public void didEnterRegion(Region arg0) {
@@ -147,10 +156,13 @@ public class LittleHelperApplication extends Application implements BootstrapNot
             this.startActivity(intent);
             haveDetectedBeaconsSinceBoot = true;
         } else {
-            if (iBeaconListFragment != null) {
+            if (notifyableBeaconListenerList != null && notifyableBeaconListenerList.size()>0) {
                 // If the Fragment is visible, we log info about the beacons we have
                 // seen on its display
-                iBeaconListFragment.update(collection, region);
+                for(NotifyableBeaconListener listener : notifyableBeaconListenerList){
+                    listener.notifyOnBeaconsRanged(collection, region);
+                }
+
             } else {
                 // If we have already seen beacons before, but the monitoring activity is not in
                 // the foreground, we send a notification to the user on subsequent detections.
