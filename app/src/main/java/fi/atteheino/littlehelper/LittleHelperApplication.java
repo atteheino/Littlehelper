@@ -23,6 +23,7 @@ import org.altbeacon.beacon.startup.RegionBootstrap;
 
 import java.util.Collection;
 
+import fi.atteheino.littlehelper.fragment.IBeaconDetailFragment;
 import fi.atteheino.littlehelper.fragment.IBeaconListFragment;
 
 /**
@@ -35,6 +36,7 @@ public class LittleHelperApplication extends Application implements BootstrapNot
     private BackgroundPowerSaver backgroundPowerSaver;
     private boolean haveDetectedBeaconsSinceBoot = false;
     private IBeaconListFragment iBeaconListFragment = null;
+    private IBeaconDetailFragment mIBeaconDetailFragment = null;
     private BeaconManager mBeaconManager;
 
     public void onCreate() {

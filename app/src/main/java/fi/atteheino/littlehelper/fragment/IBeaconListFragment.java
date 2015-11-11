@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import fi.atteheino.littlehelper.LittleHelperApplication;
+import fi.atteheino.littlehelper.NotifyableBeaconListener;
 import fi.atteheino.littlehelper.R;
 import fi.atteheino.littlehelper.adapter.IBeaconArrayAdapter;
 import fi.atteheino.littlehelper.container.BeaconWithRegion;
@@ -46,7 +47,7 @@ import fi.atteheino.littlehelper.container.BeaconWithRegion;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class IBeaconListFragment extends Fragment implements AbsListView.OnItemClickListener, BeaconConsumer {
+public class IBeaconListFragment extends Fragment implements AbsListView.OnItemClickListener, BeaconConsumer, NotifyableBeaconListener {
 
 
     private static final String TAG = "IBeaconListFragment";
@@ -285,6 +286,10 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
         return getActivity().bindService(intent, serviceConnection, i);
     }
 
+    @Override
+    public void notifyOnBeaconsRanged(Collection<Beacon> beacons, Region region) {
+        update(beacons, region);
+    }
 
 
     /**
