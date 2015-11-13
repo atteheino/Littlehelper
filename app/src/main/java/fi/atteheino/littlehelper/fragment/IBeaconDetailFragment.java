@@ -2,21 +2,13 @@ package fi.atteheino.littlehelper.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.RemoteException;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.altbeacon.beacon.Beacon;
-import org.altbeacon.beacon.BeaconConsumer;
-import org.altbeacon.beacon.BeaconManager;
-import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
 import java.util.Collection;
@@ -35,13 +27,13 @@ import fi.atteheino.littlehelper.utils.DisplayHelpers;
  * to handle interaction events.
 
  */
-public class IBeaconDetailFragment extends Fragment implements BeaconConsumer, NotifyableBeaconListener {
+public class IBeaconDetailFragment extends Fragment implements  NotifyableBeaconListener {
     private static final String ARG_ID = "id";
     private static final String TAG = "IBeaconDetailFragment";
 
     private BeaconWithRegion mId;
     private OnFragmentInteractionListener mListener;
-    private BeaconManager mBeaconManager = null;
+
 
     // UI Components
     private TextView mDeviceName;
@@ -57,9 +49,7 @@ public class IBeaconDetailFragment extends Fragment implements BeaconConsumer, N
             mId = getArguments().getParcelable(ARG_ID);
             updateFragment(mId);
         }
-        //verifyBluetooth();
-        mBeaconManager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(getActivity());
-        mBeaconManager.bind(this);
+
     }
 
     public void updateFragment(BeaconWithRegion id) {
@@ -99,7 +89,7 @@ public class IBeaconDetailFragment extends Fragment implements BeaconConsumer, N
     public void onResume() {
         super.onResume();
         ((LittleHelperApplication) getActivity().getApplicationContext()).addNotifyableBeaconListener(this);
-        mBeaconManager.setBackgroundMode(false);
+
     }
 
     @Override
@@ -109,71 +99,19 @@ public class IBeaconDetailFragment extends Fragment implements BeaconConsumer, N
 
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        mBeaconManager.setBackgroundMode(true);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mBeaconManager.unbind(this);
-        try {
-            mBeaconManager.stopRangingBeaconsInRegion(mId.getRegion());
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onBeaconServiceConnect() {
-        mBeaconManager.setRangeNotifier(new RangeNotifier() {
-            @Override
-            public void didRangeBeaconsInRegion(Collection<Beacon> collection, Region region) {
-                Log.d(TAG, "Collection of beacons found.");
-                Log.d(TAG, "Size of collection: " + collection.size());
-                updateValuesInDisplay(collection);
-            }
-        });
-
-        try {
-            // and start ranging for the given region. This region has a uuid specificed so will
-            // only react on beacons with this uuid, the 2 other fields are minor and major version
-            // to be more specific if desired
-            mBeaconManager.startRangingBeaconsInRegion(mId.getRegion());
-        } catch (RemoteException e) {
-            Log.e(IBeaconDetailFragment.class.getSimpleName(), "Failed to start ranging", e);
-        }
-    }
 
     private void updateValuesInDisplay(final Collection<Beacon> collection) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                for (Beacon beacon: collection){
-                    if(beacon.getBluetoothAddress().equals(mId.getBluetoothAddress())){
+                for (Beacon beacon : collection) {
+                    if (beacon.getBluetoothAddress().equals(mId.getBluetoothAddress())) {
 
                         mDeviceName.setText(DisplayHelpers.formatNameForScreen(beacon.getBluetoothName()));
                     }
                 }
             }
         });
-    }
-
-    @Override
-    public Context getApplicationContext() {
-        return getActivity().getApplicationContext();
-    }
-
-    @Override
-    public void unbindService(ServiceConnection serviceConnection) {
-        getActivity().unbindService(serviceConnection);
-    }
-
-    @Override
-    public boolean bindService(Intent intent, ServiceConnection serviceConnection, int i) {
-        return getActivity().bindService(intent, serviceConnection, i);
     }
 
     @Override
