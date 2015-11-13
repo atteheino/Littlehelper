@@ -76,14 +76,27 @@ public class LittleHelperApplication extends Application implements BootstrapNot
         mBeaconManager.bind(this);
     }
 
-
+    /**
+     * Add NotifyableBeaconLister into internal collection.
+     * Only new listeners will be added.
+     * Remember to call {@link #removeNotifyableBeaconListener(NotifyableBeaconListener)}
+     * to remove listener if not available
+     * @param notifyableBeaconListener
+     */
     public void addNotifyableBeaconListener(NotifyableBeaconListener notifyableBeaconListener) {
         if(notifyableBeaconListenerList==null){
             notifyableBeaconListenerList = Collections.EMPTY_LIST;
         }
-        notifyableBeaconListenerList.add(notifyableBeaconListener);
+        if(!notifyableBeaconListenerList.contains(notifyableBeaconListener)){
+            notifyableBeaconListenerList.add(notifyableBeaconListener);
+        }
     }
 
+    /**
+     * Remove {@link NotifyableBeaconListener} from internal collection so that
+     * object will not get notified.
+     * @param notifyableBeaconListener
+     */
     public void removeNotifyableBeaconListener(NotifyableBeaconListener notifyableBeaconListener){
         if(notifyableBeaconListenerList != null && notifyableBeaconListener!= null){
             notifyableBeaconListenerList.remove(notifyableBeaconListener);
