@@ -3,13 +3,9 @@ package fi.atteheino.littlehelper.fragment;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.RemoteException;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,9 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import org.altbeacon.beacon.Beacon;
-import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconManager;
-import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
 import java.util.ArrayList;
@@ -47,7 +41,7 @@ import fi.atteheino.littlehelper.container.BeaconWithRegion;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class IBeaconListFragment extends Fragment implements AbsListView.OnItemClickListener, BeaconConsumer, NotifyableBeaconListener {
+public class IBeaconListFragment extends Fragment implements AbsListView.OnItemClickListener, NotifyableBeaconListener {
 
 
     private static final String TAG = "IBeaconListFragment";
@@ -55,7 +49,6 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
     private OnFragmentInteractionListener mListener;
     private ArrayList<BeaconWithRegion> mLeDevicesList;
     private ArrayAdapter<BeaconWithRegion> mAdapter;
-    private BeaconManager mBeaconManager = null;
 
     /**
      * The fragment's ListView/GridView.
@@ -78,11 +71,7 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
         mAdapter = new IBeaconArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, mLeDevicesList);
         mHandler = new Handler();
 
-
         //verifyBluetooth();
-        mBeaconManager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(getActivity());
-        mBeaconManager.bind(this);
-
 
     }
 
@@ -188,7 +177,6 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
     public void onResume() {
         super.onResume();
         //verifyBluetooth();
-        //((LittleHelperApplication) getActivity().getApplicationContext()).setiBeaconListFragment(this);
         ((LittleHelperApplication) getActivity().getApplicationContext()).addNotifyableBeaconListener(this);
         // Initializes list view adapter.
         if(mLeDevicesList == null){
@@ -200,8 +188,6 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
         // Set the adapter
         mListView = (ListView) getActivity().findViewById(R.id.bluetoothDeviceList);
         mListView.setAdapter(mAdapter);
-        mBeaconManager.setBackgroundMode(false);
-        mBeaconManager.bind(this);
 
     }
 
@@ -209,16 +195,10 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
     public void onPause() {
         super.onPause();
 
-        ((LittleHelperApplication) getActivity().getApplicationContext()).setiBeaconListFragment(null);
+        ((LittleHelperApplication) getActivity().getApplicationContext()).removeNotifyableBeaconListener(this);
         mAdapter.clear();
-        mBeaconManager.setBackgroundMode(true);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mBeaconManager.unbind(this);
-    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -249,42 +229,6 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
             // fragment is attached to one) that an item has been selected.
             mListener.onFragmentInteraction(mAdapter.getItem(position));
         }
-    }
-
-
-    @Override
-    public void onBeaconServiceConnect() {
-        mBeaconManager.setRangeNotifier(new RangeNotifier() {
-            @Override
-            public void didRangeBeaconsInRegion(Collection<Beacon> collection, Region region) {
-                update(collection, region);
-            }
-        });
-
-        try {
-            // and start ranging for the given region. This region has a uuid specificed so will
-            // only react on beacons with this uuid, the 2 other fields are minor and major version
-            // to be more specific if desired
-            mBeaconManager.startRangingBeaconsInRegion(new Region("backgroundRegion",
-                    null, null, null));
-        } catch (RemoteException e) {
-            Log.e(IBeaconListFragment.class.getSimpleName(), "Failed to start ranging", e);
-        }
-    }
-
-    @Override
-    public Context getApplicationContext() {
-        return getActivity().getApplicationContext();
-    }
-
-    @Override
-    public void unbindService(ServiceConnection serviceConnection) {
-        getActivity().unbindService(serviceConnection);
-    }
-
-    @Override
-    public boolean bindService(Intent intent, ServiceConnection serviceConnection, int i) {
-        return getActivity().bindService(intent, serviceConnection, i);
     }
 
     @Override

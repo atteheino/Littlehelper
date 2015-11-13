@@ -93,6 +93,12 @@ public class IBeaconDetailFragment extends Fragment implements  NotifyableBeacon
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        ((LittleHelperApplication) getActivity().getApplicationContext()).removeNotifyableBeaconListener(this);
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;

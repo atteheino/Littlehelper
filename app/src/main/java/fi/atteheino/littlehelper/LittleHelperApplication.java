@@ -84,6 +84,12 @@ public class LittleHelperApplication extends Application implements BootstrapNot
         notifyableBeaconListenerList.add(notifyableBeaconListener);
     }
 
+    public void removeNotifyableBeaconListener(NotifyableBeaconListener notifyableBeaconListener){
+        if(notifyableBeaconListenerList != null && notifyableBeaconListener!= null){
+            notifyableBeaconListenerList.remove(notifyableBeaconListener);
+        }
+    }
+
     @Override
     public void didEnterRegion(Region arg0) {
         // In this example, this class sends a notification to the user whenever a Beacon
