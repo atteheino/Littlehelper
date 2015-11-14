@@ -21,8 +21,8 @@ import org.altbeacon.beacon.powersave.BackgroundPowerSaver;
 import org.altbeacon.beacon.startup.BootstrapNotifier;
 import org.altbeacon.beacon.startup.RegionBootstrap;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import fi.atteheino.littlehelper.fragment.IBeaconDetailFragment;
@@ -85,7 +85,7 @@ public class LittleHelperApplication extends Application implements BootstrapNot
      */
     public void addNotifyableBeaconListener(NotifyableBeaconListener notifyableBeaconListener) {
         if(notifyableBeaconListenerList==null){
-            notifyableBeaconListenerList = Collections.EMPTY_LIST;
+            notifyableBeaconListenerList = new ArrayList();
         }
         if(!notifyableBeaconListenerList.contains(notifyableBeaconListener)){
             notifyableBeaconListenerList.add(notifyableBeaconListener);

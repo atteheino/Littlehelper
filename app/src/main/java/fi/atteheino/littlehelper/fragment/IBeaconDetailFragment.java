@@ -71,7 +71,7 @@ public class IBeaconDetailFragment extends Fragment implements  NotifyableBeacon
         view.setVisibility(View.VISIBLE);
         // Get references to UI Components
         // Only need to do this once
-        mDeviceName =  (TextView) getActivity().findViewById(R.id.device_name);
+        mDeviceName =  (TextView) getView().findViewById(R.id.device_name);
     }
 
     @Override
