@@ -37,6 +37,13 @@ public class IBeaconDetailFragment extends Fragment implements  NotifyableBeacon
 
     // UI Components
     private TextView mDeviceName;
+    private TextView mMacAddress;
+    private TextView mUUID;
+    private TextView mMajor;
+    private TextView mMinor;
+    private TextView mDistance;
+    private TextView mTxPower;
+
 
     public IBeaconDetailFragment() {
         // Required empty public constructor
@@ -72,6 +79,12 @@ public class IBeaconDetailFragment extends Fragment implements  NotifyableBeacon
         // Get references to UI Components
         // Only need to do this once
         mDeviceName =  (TextView) getView().findViewById(R.id.device_name);
+        mMacAddress = (TextView) getView().findViewById(R.id.mac_address);
+        mDistance = (TextView) getView().findViewById(R.id.distance);
+        mMajor = (TextView) getView().findViewById(R.id.major);
+        mMinor = (TextView) getView().findViewById(R.id.minor);
+        mUUID = (TextView) getView().findViewById(R.id.UUID);
+        mTxPower = (TextView) getView().findViewById(R.id.tx_power);
     }
 
     @Override
@@ -114,6 +127,12 @@ public class IBeaconDetailFragment extends Fragment implements  NotifyableBeacon
                     if (beacon.getBluetoothAddress().equals(mId.getBluetoothAddress())) {
 
                         mDeviceName.setText(DisplayHelpers.formatNameForScreen(beacon.getBluetoothName()));
+                        mMacAddress.setText(beacon.getBluetoothAddress());
+                        mMajor.setText(beacon.getId2().toString());
+                        mMinor.setText(beacon.getId3().toString());
+                        mUUID.setText(beacon.getId1().toString());
+                        mDistance.setText(DisplayHelpers.formatDistanceForScreen(beacon.getDistance()));
+                        mTxPower.setText(beacon.getTxPower());
                     }
                 }
             }
