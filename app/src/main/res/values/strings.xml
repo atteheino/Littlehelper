@@ -17,4 +17,11 @@
     <string name="menu_stop">Stop</string>
     <string name="title_activity_ibeacon_detail_fragment">IBeaconDetailFragment</string>
     <string name="ibeacon_list_distance_label">Distance:</string>
+    <string name="device_name_label">Name:</string>
+    <string name="mac_address_label">MAC:</string>
+    <string name="UUID_label">UUID:</string>
+    <string name="major_label">Marjor:</string>
+    <string name="minor_label">Minor:</string>
+    <string name="distance_label">Distance:</string>
+    <string name="tx_power_label">TX:</string>
 </resources>
