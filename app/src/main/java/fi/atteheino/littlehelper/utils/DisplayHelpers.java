@@ -23,4 +23,8 @@ public class DisplayHelpers {
             return name;
         }
     }
+
+    public static String formatTXForScreen(final int tx){
+        return String.valueOf(tx).concat(" dBm");
+    }
 }

@@ -84,7 +84,7 @@ public class IBeaconDetailFragment extends Fragment implements  NotifyableBeacon
         mMajor = (TextView) getView().findViewById(R.id.major);
         mMinor = (TextView) getView().findViewById(R.id.minor);
         mUUID = (TextView) getView().findViewById(R.id.UUID);
-        //mTxPower = (TextView) getView().findViewById(R.id.tx_power);
+        mTxPower = (TextView) getView().findViewById(R.id.tx_power);
     }
 
     @Override
@@ -132,7 +132,7 @@ public class IBeaconDetailFragment extends Fragment implements  NotifyableBeacon
                         mMinor.setText(beacon.getId3().toString());
                         mUUID.setText(beacon.getId1().toString());
                         mDistance.setText(DisplayHelpers.formatDistanceForScreen(beacon.getDistance()));
-                        //mTxPower.setText(beacon.getTxPower());
+                        mTxPower.setText(DisplayHelpers.formatTXForScreen(beacon.getTxPower()));
                     }
                 }
             }
