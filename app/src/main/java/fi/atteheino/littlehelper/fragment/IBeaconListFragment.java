@@ -24,12 +24,14 @@ import org.altbeacon.beacon.Region;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import fi.atteheino.littlehelper.LittleHelperApplication;
 import fi.atteheino.littlehelper.NotifyableBeaconListener;
 import fi.atteheino.littlehelper.R;
 import fi.atteheino.littlehelper.adapter.IBeaconArrayAdapter;
 import fi.atteheino.littlehelper.container.BeaconWithRegion;
+import fi.atteheino.littlehelper.log.BleLog;
 
 
 /**
@@ -139,6 +141,39 @@ public class IBeaconListFragment extends Fragment implements AbsListView.OnItemC
                 mAdapter.notifyDataSetChanged();
             }
         });
+        // Now outside the UI Thread let's create a log entry to db. This could potentially take a while..
+        for (Beacon beacon : collection) {
+            logDevice(beacon);
+        }
+    }
+
+    /**
+     * Let's try to find existing device from log and update name, mac and timestamp.
+     * If no device is found, then let's create a new entry.
+     * @param beacon
+     */
+    private void logDevice(Beacon beacon) {
+
+        final List<BleLog> bleLogs = BleLog.find(BleLog.class,
+                "UUID=? and major=? and minor=?",
+                beacon.getId1().toString(),
+                beacon.getId2().toString(),
+                beacon.getId3().toString());
+
+        if (bleLogs.size()>0) {
+            for (BleLog log : bleLogs) {
+                log.updateBleLog(beacon.getBluetoothName(), beacon.getBluetoothAddress());
+                log.save();
+            }
+        } else {
+            BleLog logEntry = new BleLog(
+                    beacon.getBluetoothName(),
+                    beacon.getId1().toString(),
+                    beacon.getId2().toString(),
+                    beacon.getId3().toString(),
+                    beacon.getBluetoothAddress());
+            logEntry.save();
+        }
     }
 
     /**

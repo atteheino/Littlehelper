@@ -10,6 +10,8 @@ import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.orm.SugarContext;
+
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconManager;
@@ -74,6 +76,8 @@ public class LittleHelperApplication extends Application implements BootstrapNot
         ((TimedBeaconSimulator) BeaconManager.getBeaconSimulator()).createTimedSimulatedBeacons();
 
         mBeaconManager.bind(this);
+
+        SugarContext.init(getApplicationContext());
     }
 
     /**
@@ -198,6 +202,7 @@ public class LittleHelperApplication extends Application implements BootstrapNot
         // release whatever is needed
         mBeaconManager.unbind(this);
         mBeaconManager = null;
+        SugarContext.terminate();
     }
 
     @Override
