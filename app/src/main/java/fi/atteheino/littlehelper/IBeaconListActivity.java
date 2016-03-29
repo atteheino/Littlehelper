@@ -36,7 +36,11 @@ implements IBeaconListFragment.OnFragmentInteractionListener{
         if (id == R.id.action_settings) {
             return true;
         }
-
+        if (id ==  R.id.menu_show_log) {
+            Intent intent = new Intent();
+            intent.setClass(this, BLELogActivity.class);
+            startActivity(intent);
+        }
         return super.onOptionsItemSelected(item);
     }
 

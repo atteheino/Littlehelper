@@ -13,6 +13,10 @@
         android:orderInCategory="101"
         android:showAsAction="ifRoom|withText"
         android:title="@string/menu_stop"/>
+    <item android:id="@+id/menu_show_log"
+        android:orderInCategory="102"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/menu_show_log"/>
 
 
 </menu>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="fi.atteheino.littlehelper" >
+    package="fi.atteheino.littlehelper">
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -28,7 +28,7 @@
         <activity
             android:name=".IbeaconConfigActivity"
             android:label="@string/title_activity_ibeacon_config"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="fi.atteheino.littlehelper.MainActivity" />
@@ -36,7 +36,7 @@
         <activity
             android:name=".IBeaconListActivity"
             android:label="@string/title_activity_ibeacon_list"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="fi.atteheino.littlehelper.MainActivity" />
@@ -44,16 +44,33 @@
         <activity
             android:name=".IBeaconDetailActivity"
             android:label="@string/title_activity_ibeacon_detail_fragment"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="fi.atteheino.littlehelper.MainActivity" />
         </activity>
 
-        <meta-data android:name="DATABASE" android:value="ble_log.db" />
-        <meta-data android:name="VERSION" android:value="1" />
-        <meta-data android:name="QUERY_LOG" android:value="true" />
-        <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="fi.atteheino.littlehelper.log" />
+        <meta-data
+            android:name="DATABASE"
+            android:value="ble_log.db" />
+        <meta-data
+            android:name="VERSION"
+            android:value="1" />
+        <meta-data
+            android:name="QUERY_LOG"
+            android:value="true" />
+        <meta-data
+            android:name="DOMAIN_PACKAGE_NAME"
+            android:value="fi.atteheino.littlehelper.log" />
+
+        <activity
+            android:name=".BLELogActivity"
+            android:label="@string/title_activity_blelog"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="fi.atteheino.littlehelper.MainActivity" />
+        </activity>
 
     </application>
 

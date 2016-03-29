@@ -18,7 +18,6 @@ import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
-import org.altbeacon.beacon.TimedBeaconSimulator;
 import org.altbeacon.beacon.powersave.BackgroundPowerSaver;
 import org.altbeacon.beacon.startup.BootstrapNotifier;
 import org.altbeacon.beacon.startup.RegionBootstrap;
@@ -29,6 +28,7 @@ import java.util.List;
 
 import fi.atteheino.littlehelper.fragment.IBeaconDetailFragment;
 import fi.atteheino.littlehelper.fragment.IBeaconListFragment;
+import fi.atteheino.littlehelper.log.BleLog;
 
 /**
  * Created by atte on 9.10.2015.
@@ -72,8 +72,8 @@ public class LittleHelperApplication extends Application implements BootstrapNot
 
         // If you wish to test beacon detection in the Android Emulator, you can use code like this:
 
-        BeaconManager.setBeaconSimulator(new TimedBeaconSimulator() );
-        ((TimedBeaconSimulator) BeaconManager.getBeaconSimulator()).createTimedSimulatedBeacons();
+//        BeaconManager.setBeaconSimulator(new TimedBeaconSimulator() );
+//        ((TimedBeaconSimulator) BeaconManager.getBeaconSimulator()).createTimedSimulatedBeacons();
 
         mBeaconManager.bind(this);
 
@@ -193,6 +193,10 @@ public class LittleHelperApplication extends Application implements BootstrapNot
                 //sendNotification();
 
             }
+        }
+        // Let's log the beacon we saw. No matter the conditions.
+        for (Beacon beacon : collection) {
+            BleLog.logDevice(beacon);
         }
     }
 

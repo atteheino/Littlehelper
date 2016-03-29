@@ -1,8 +1,10 @@
 package fi.atteheino.littlehelper;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,6 +13,7 @@ import android.view.MenuItem;
 import fi.atteheino.littlehelper.container.BeaconWithRegion;
 import fi.atteheino.littlehelper.fragment.IBeaconDetailFragment;
 import fi.atteheino.littlehelper.fragment.IBeaconListFragment;
+import fi.atteheino.littlehelper.log.BleLog;
 
 
 public class MainActivity extends Activity
@@ -62,9 +65,47 @@ public class MainActivity extends Activity
             return true;
         }
 
+        if (id ==  R.id.menu_show_log) {
+            Intent intent = new Intent();
+            intent.setClass(this, BLELogActivity.class);
+            startActivity(intent);
+        }
+        if (id == R.id.menu_drop_blelog) {
+            confirmDeleteAll();
+        }
         return super.onOptionsItemSelected(item);
     }
 
+    private void confirmDeleteAll() {
+        new AlertDialog.Builder(this)
+                .setTitle(getResources().getString(R.string.pref_drop_database_title))
+                .setMessage(
+                        getResources().getString(R.string.pref_drop_database_text))
+                .setIcon(
+                        getResources().getDrawable(
+                                android.R.drawable.ic_dialog_alert))
+                .setPositiveButton(
+                        getResources().getString(R.string.PostiveYesButton),
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+                                BleLog.deleteAll(BleLog.class);
+
+                            }
+                        })
+                .setNegativeButton(
+                        getResources().getString(R.string.NegativeNoButton),
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+                                //Do Something Here
+                            }
+                        }).show();
+    }
 
 
     @Override
