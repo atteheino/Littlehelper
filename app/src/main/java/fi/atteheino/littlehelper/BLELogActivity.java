@@ -25,7 +25,7 @@ public class BLELogActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         mBleLogsList = getBleLogs();
-        mAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, mBleLogsList);
+        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mBleLogsList);
         mListView = (ListView) findViewById(R.id.listView);
         mListView.setAdapter(mAdapter);
     }
